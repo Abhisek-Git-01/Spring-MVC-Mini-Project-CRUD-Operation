@@ -3,14 +3,14 @@ package com.spring.entity;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -45,7 +45,7 @@ public class DoctorEntity {
 	
 	//MetaData properties
 	@Version
-	private Integer version;
+	private Integer updateCount;
 	@CreatedBy
 	private String createdBy = System.getProperty("user.name");
 	@CreationTimestamp
@@ -57,7 +57,8 @@ public class DoctorEntity {
 	@LastModifiedBy
 	@Column(insertable=false)
 	private String updatedBy=System.getProperty("user.name");
-
+	@Column(length=30)
+    private String status="ACTIVE";
 	
 	
 }

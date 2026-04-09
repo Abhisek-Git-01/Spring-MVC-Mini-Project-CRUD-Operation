@@ -5,6 +5,10 @@ import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,6 +30,7 @@ public class DoctorManagementController {
 
 	@GetMapping("/")
 	public String showHomePage() {
+		 System.out.println("HOME HIT");
 		return "welcome";
 	}
 	
@@ -37,7 +42,7 @@ public class DoctorManagementController {
 	}
 	
 	@GetMapping("/register")
-	public String showRegistrationPage(@ModelAttribute("doctorVO") DoctorVO doctorVO) {
+	public String showRegistrationPage(@ModelAttribute DoctorVO doctorVO) {
 	    return "register-page";
 	}
 	
@@ -81,6 +86,16 @@ public class DoctorManagementController {
 		String msg = doctorService.removeDoctor(id);
 		atts.addFlashAttribute("deleteMsg", msg);
 		return "redirect:showReport";
+	}
+	@GetMapping("/page")
+	public String showDoctorsByPagination(@PageableDefault(page=0,size=2,sort="doctorName",direction=Direction.ASC)
+	                                      Pageable pageable, Map<String, Object> map) {
+		
+		Page<DoctorVO> listVO = doctorService.showDoctorByPagination(pageable);
+		map.put("pageData", listVO);
+		
+		return "page-report";
+		
 	}
 
 }

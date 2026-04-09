@@ -1,10 +1,13 @@
 package com.spring.service;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.spring.entity.DoctorEntity;
@@ -74,6 +77,31 @@ public class DoctorServiceManagementImpl implements IDoctorManagementService {
 		}
 		else 
 			return "Doctor not found having Doctor Id "+id;
+	}
+
+	@Override
+	public Page<DoctorVO> showDoctorByPagination(Pageable pageable) {
+		/*
+		Page<DoctorEntity> entitypage = doctorRepo.findAll(pageable);
+		
+		List<DoctorVO> listvo = new ArrayList<>();
+		
+		entitypage.forEach(entity->{
+			DoctorVO vo = new DoctorVO();
+			BeanUtils.copyProperties(entity, vo);
+			listvo.add(vo);
+		});
+		
+		Page<DoctorVO> vopage = new PageImpl<>(listvo, pageable, entitypage.getTotalElements());
+		return vopage ;*/
+		
+		Page<DoctorEntity> enitityPage = doctorRepo.findAll(pageable);
+		
+		return enitityPage.map(enity->{
+			DoctorVO vo = new DoctorVO();
+			BeanUtils.copyProperties(enity, vo);
+			return vo;
+		});
 	}
 
 }
